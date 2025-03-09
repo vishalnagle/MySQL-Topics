@@ -1,0 +1,192 @@
+# Introduction to MySQL
+## What is MySQL?
+MySQL is an open-source relational database management system (RDBMS) that uses Structured Query Language (SQL) to manage and manipulate data. It is widely used for web applications, data storage, and transactional processing.
+
+## Features & Benefits of MySQL
+- **High Performance**: Optimized for high-speed transactions.
+- **Scalability**: Can handle large amounts of data and concurrent users.
+- **Security**: Provides authentication, access control, and encryption.
+- **Cross-Platform Support**: Runs on Windows, Linux, and macOS.
+- **Replication & Backup**: Supports master-slave replication and point-in-time recovery.
+
+## SQL vs. NoSQL
+- **SQL (Structured Query Language)**: Uses structured tables, predefined schema, ACID compliance.
+- **NoSQL (Not Only SQL)**: Flexible schema, handles unstructured data, supports horizontal scaling.
+
+## Installing MySQL on Windows/Linux/macOS
+1. **Windows**: Install using MySQL Installer.
+2. **Linux**: Install using `apt` (`sudo apt install mysql-server`) or `yum` (`sudo yum install mysql-server`).
+3. **macOS**: Install via Homebrew (`brew install mysql`).
+
+## Connecting to MySQL Server
+- **CLI**: `mysql -u root -p`
+- **GUI Tools**: MySQL Workbench, phpMyAdmin
+
+# MySQL Data Types
+## Numeric Data Types
+- **INT**: Whole numbers (-2147483648 to 2147483647)
+- **FLOAT**: Floating-point numbers
+- **DECIMAL**: Fixed-point precision numbers
+
+## String Data Types
+- **VARCHAR(n)**: Variable-length string (1 to 65535)
+- **TEXT**: Large text (up to 4GB)
+- **CHAR(n)**: Fixed-length string
+
+## Date & Time Data Types
+- **DATE**: YYYY-MM-DD
+- **DATETIME**: YYYY-MM-DD HH:MM:SS
+- **TIMESTAMP**: UNIX timestamp
+
+## Boolean Data Type
+- MySQL does not have a native `BOOLEAN` type; uses `TINYINT(1)`
+
+# MySQL Database & Table Management
+## Creating & Dropping Databases
+```sql
+CREATE DATABASE mydb;
+DROP DATABASE mydb;
+```
+
+## Creating & Dropping Tables
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    age INT
+);
+DROP TABLE users;
+```
+
+## Modifying Table Structure
+```sql
+ALTER TABLE users ADD email VARCHAR(100);
+ALTER TABLE users MODIFY age TINYINT;
+ALTER TABLE users DROP COLUMN email;
+```
+
+## Keys & Indexes
+- **Primary Key**: Unique identifier
+- **Foreign Key**: Links tables
+- **Unique**: Ensures unique values
+- **Index**: Speeds up searches
+
+# CRUD Operations in MySQL
+## Create (INSERT INTO)
+```sql
+INSERT INTO users (id, name, age) VALUES (1, 'John Doe', 25);
+```
+
+## Read (SELECT)
+```sql
+SELECT * FROM users WHERE age > 20;
+```
+
+## Update (UPDATE)
+```sql
+UPDATE users SET age = 26 WHERE id = 1;
+```
+
+## Delete (DELETE)
+```sql
+DELETE FROM users WHERE id = 1;
+```
+
+# Filtering & Sorting Data
+## WHERE Clause
+```sql
+SELECT * FROM users WHERE age > 18;
+```
+
+## ORDER BY
+```sql
+SELECT * FROM users ORDER BY name ASC;
+```
+
+## LIMIT
+```sql
+SELECT * FROM users LIMIT 5;
+```
+
+## DISTINCT
+```sql
+SELECT DISTINCT name FROM users;
+```
+
+# MySQL Functions
+## String Functions
+```sql
+SELECT CONCAT(first_name, ' ', last_name) FROM employees;
+```
+
+## Numeric Functions
+```sql
+SELECT ROUND(price, 2) FROM products;
+```
+
+## Date Functions
+```sql
+SELECT NOW(), DATE_FORMAT(NOW(), '%Y-%m-%d');
+```
+
+## Aggregate Functions
+```sql
+SELECT COUNT(*) FROM users;
+```
+
+# MySQL Joins
+## Inner Join
+```sql
+SELECT users.name, orders.order_id
+FROM users INNER JOIN orders ON users.id = orders.user_id;
+```
+
+## Left Join
+```sql
+SELECT users.name, orders.order_id
+FROM users LEFT JOIN orders ON users.id = orders.user_id;
+```
+
+## Right Join
+```sql
+SELECT users.name, orders.order_id
+FROM users RIGHT JOIN orders ON users.id = orders.user_id;
+```
+
+## Full Join (Using UNION)
+```sql
+SELECT users.name, orders.order_id
+FROM users LEFT JOIN orders ON users.id = orders.user_id
+UNION
+SELECT users.name, orders.order_id
+FROM users RIGHT JOIN orders ON users.id = orders.user_id;
+```
+
+# MySQL Grouping & Aggregation
+## GROUP BY
+```sql
+SELECT age, COUNT(*) FROM users GROUP BY age;
+```
+
+## HAVING
+```sql
+SELECT age, COUNT(*) FROM users GROUP BY age HAVING COUNT(*) > 2;
+```
+
+# MySQL Subqueries
+## Single-row Subquery
+```sql
+SELECT name FROM users WHERE id = (SELECT MIN(id) FROM users);
+```
+
+## Multi-row Subquery
+```sql
+SELECT name FROM users WHERE age IN (SELECT age FROM users WHERE age > 25);
+```
+
+## Correlated Subquery
+```sql
+SELECT name FROM users u1 WHERE age > (SELECT AVG(age) FROM users u2 WHERE u1.id = u2.id);
+```
+
+

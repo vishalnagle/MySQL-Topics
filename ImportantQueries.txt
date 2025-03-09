@@ -1,0 +1,180 @@
+Here’s a list of important and frequently used MySQL queries, covering both **basic** and **advanced** topics:  
+
+---
+
+### 🔹 **Basic MySQL Queries**  
+#### 1️⃣ **Database Management**  
+```sql
+CREATE DATABASE db_name;   -- Create a database  
+DROP DATABASE db_name;     -- Delete a database  
+SHOW DATABASES;            -- List all databases  
+USE db_name;               -- Select a database  
+```
+
+#### 2️⃣ **Table Management**  
+```sql
+CREATE TABLE users (  
+    id INT PRIMARY KEY AUTO_INCREMENT,  
+    name VARCHAR(100),  
+    email VARCHAR(100) UNIQUE  
+);  
+
+DROP TABLE users;     -- Delete a table  
+SHOW TABLES;          -- List all tables in the database  
+DESCRIBE users;       -- Get table structure  
+```
+
+#### 3️⃣ **CRUD Operations**  
+```sql
+-- Insert Data  
+INSERT INTO users (name, email) VALUES ('John Doe', 'john@example.com');  
+
+-- Read Data  
+SELECT * FROM users;  
+SELECT name, email FROM users WHERE id = 1;  
+
+-- Update Data  
+UPDATE users SET name = 'Jane Doe' WHERE id = 1;  
+
+-- Delete Data  
+DELETE FROM users WHERE id = 1;  
+```
+
+#### 4️⃣ **Filtering & Sorting Data**  
+```sql
+SELECT * FROM users WHERE name = 'John';  
+SELECT * FROM users ORDER BY name ASC;  
+SELECT * FROM users LIMIT 5;  
+SELECT * FROM users WHERE email LIKE '%@gmail.com';  
+SELECT * FROM users WHERE name IN ('John', 'Jane');  
+```
+
+#### 5️⃣ **Joins (Combining Multiple Tables)**  
+```sql
+-- Inner Join (Returns matching rows)  
+SELECT users.id, users.name, orders.amount  
+FROM users  
+INNER JOIN orders ON users.id = orders.user_id;  
+
+-- Left Join (Returns all users, even if no orders)  
+SELECT users.id, users.name, orders.amount  
+FROM users  
+LEFT JOIN orders ON users.id = orders.user_id;  
+
+-- Right Join (Returns all orders, even if no users)  
+SELECT users.id, users.name, orders.amount  
+FROM users  
+RIGHT JOIN orders ON users.id = orders.user_id;  
+```
+
+---
+
+### 🔥 **Advanced MySQL Queries**  
+
+#### 6️⃣ **Indexing & Performance Optimization**  
+```sql
+CREATE INDEX idx_name ON users(name);   -- Create index for faster search  
+SHOW INDEX FROM users;                  -- View indexes  
+DROP INDEX idx_name ON users;           -- Remove index  
+```
+
+#### 7️⃣ **Transactions (ACID Compliance)**  
+```sql
+START TRANSACTION;  
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;  
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;  
+COMMIT; -- Save changes  
+
+-- Rollback changes if error occurs  
+ROLLBACK;  
+```
+
+#### 8️⃣ **Stored Procedures**  
+```sql
+DELIMITER //  
+CREATE PROCEDURE GetUsers()  
+BEGIN  
+    SELECT * FROM users;  
+END //  
+DELIMITER ;  
+
+CALL GetUsers(); -- Execute stored procedure  
+```
+
+#### 9️⃣ **Triggers**  
+```sql
+CREATE TRIGGER before_insert_users  
+BEFORE INSERT ON users  
+FOR EACH ROW  
+SET NEW.created_at = NOW();  
+```
+
+#### 🔟 **Views (Virtual Tables)**  
+```sql
+CREATE VIEW UserEmails AS  
+SELECT name, email FROM users;  
+
+SELECT * FROM UserEmails; -- Use the view  
+```
+
+#### 1️⃣1️⃣ **Aggregation & Grouping**  
+```sql
+SELECT COUNT(*) FROM users;  
+SELECT AVG(salary) FROM employees;  
+SELECT department, COUNT(*) FROM employees GROUP BY department;  
+SELECT department, MAX(salary) FROM employees GROUP BY department;  
+```
+
+#### 1️⃣2️⃣ **Full-Text Search (Fast Searching in Large Data)**  
+```sql
+ALTER TABLE articles ADD FULLTEXT(title, content);  
+SELECT * FROM articles WHERE MATCH(title, content) AGAINST('MySQL');  
+```
+
+#### 1️⃣3️⃣ **JSON Handling in MySQL**  
+```sql
+SELECT JSON_EXTRACT(json_column, '$.name') FROM users;  
+INSERT INTO users (data) VALUES ('{"name": "John", "age": 30}');  
+```
+
+#### 1️⃣4️⃣ **Partitioning (Handling Large Datasets Efficiently)**  
+```sql
+CREATE TABLE orders (  
+    id INT NOT NULL,  
+    order_date DATE NOT NULL  
+) PARTITION BY RANGE (YEAR(order_date)) (  
+    PARTITION p0 VALUES LESS THAN (2023),  
+    PARTITION p1 VALUES LESS THAN (2024)  
+);  
+```
+
+#### 1️⃣5️⃣ **Replication (For High Availability & Backups)**  
+```sql
+SHOW MASTER STATUS;  
+SHOW SLAVE STATUS;  
+```
+
+---
+
+### **Bonus: Miscellaneous Queries**  
+
+✅ **Checking Running Queries:**  
+```sql
+SHOW PROCESSLIST;  
+KILL process_id;  
+```
+
+✅ **Checking Table Size:**  
+```sql
+SELECT table_name, ROUND((data_length + index_length) / 1024 / 1024, 2) AS size_mb  
+FROM information_schema.tables  
+WHERE table_schema = 'your_database';  
+```
+
+✅ **Backup & Restore Database:**  
+```bash
+mysqldump -u root -p database_name > backup.sql   # Backup  
+mysql -u root -p database_name < backup.sql      # Restore  
+```
+
+---
